@@ -1,12 +1,7 @@
 public class ComponentManager {
     private Component[] parts = new Component[10];
     private int counter = 0;
-    private String Component;
 
-
-    public ComponentManager() {
-
-    }
 
     //fügt eine Komponente zum Array components hinzu, was mit dem Kauf
     // der Komponenten gleichzusetzen ist
@@ -28,40 +23,54 @@ public class ComponentManager {
             if (parts[i] != null) {
                 x += parts[i];
             }
-
-
         }
         return x;
     }
 
     //liefert die Gesamtzahl der gekauften Komponenten
     public int getTotalNumber() {
-        int x = 0;
+        int bought = 0;
         for (int i = 0; i < parts.length; i++) {
             if (parts[i] != null) {
-                x++;
+                bought++;
             }
         }
-        return x;
+        return bought;
     }
 
     //sucht unter den gekauften Komponenten (d.h. im Array) nach der Bezeichnung einer Komponente und
     // liefert die Komponente zurück, falls gefunden, und null sonst
-    public Component searchComponent(String name) {
+    public Component searchComponent(String name) throws NullPointerException {
+        if (parts[0] == null){
+            throw new NullPointerException("Die Liste ist leer");
+        }
+
         for (int i = 0; i < parts.length; i++) {
-            if (parts[i] != null && parts[i].getDescription().equals(name)) { //
+            if (parts[i] != null && parts[i].getDescription().equals(name)) {
                 return parts[i];
             }
         }
+
         return null;
     }
 
+
     //liefert den Gesamtpreis aller gekauften Komponenten zurück
-    public double calculatePrice() {
+    public double calculatePrice() throws IllegalArgumentException {
         double erg = 0;
+
         for (int i = 0; i < parts.length; i++) {
+
             if (parts[i] != null) {
+                if(parts[i].getPrice()<1){
+                    throw new IllegalArgumentException("Mindestbestellwert");
+                }
                 erg += parts[i].getPrice();
+            }
+            //Fehlermeldung schmeißen
+            if (erg < 0){
+                throw new IllegalArgumentException("Fehler in der Rechnung");
+                    //erg = 0;------------------------------------------------------
             }
         }
         return erg;
@@ -92,6 +101,7 @@ public class ComponentManager {
 
         return totalHours;
     }
+
 
 
 }
