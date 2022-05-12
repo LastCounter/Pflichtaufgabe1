@@ -67,10 +67,10 @@ public class ComponentManager {
                 }
                 erg += parts[i].getPrice();
             }
-            //Fehlermeldung schmeißen
+            //Fehlermeldung schmeißen abfangen mit try/catch
             if (erg < 0){
                 throw new IllegalArgumentException("Fehler in der Rechnung");
-                    //erg = 0;------------------------------------------------------
+
             }
         }
         return erg;

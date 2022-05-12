@@ -19,7 +19,7 @@ class ComponentManagerTest {
 
         assertEquals(HardDisk, shoppingList1.searchComponent("SSD"));
     }
-    //2. Sucheingabe nicht gefunden, Rückgabewert null
+    //2. Such Eingabe nicht gefunden, Rückgabewert null
     @Test
     public void testSearchComponentNotFound() {
         Component hardDisk = new Component(70, true, "SSD");
@@ -28,7 +28,7 @@ class ComponentManagerTest {
 
         assertEquals(null, shoppingList1.searchComponent("HDD"));
     }
-    //3. suchen in eines leeren Arrays (Liste)
+    //3. suchen in einem leeren Array Objekt (Liste)
     @Test
     public void testSearchComponentListEmpty() {
         ComponentManager shoppingList = new ComponentManager();
@@ -64,6 +64,17 @@ class ComponentManagerTest {
         shoppingList.buyComponent(hardDisk4);
         assertEquals(hardDisk3, shoppingList.searchComponent("SSD"));
     }
+    //6. Normalfall 2 Mal durchgeführt
+    @Test
+    public void testSearchComponentHappyPathSearchMultipleTimes() {
+        Component HardDisk = new Component(70, true, "SSD");
+        Component HardDisk2 = new Component(70, true, "HDD");
+        ComponentManager shoppingList1 = new ComponentManager();
+        shoppingList1.buyComponent(HardDisk);
+        shoppingList1.buyComponent(HardDisk2);
+
+        assertEquals(HardDisk2, shoppingList1.searchComponent("HDD"));
+    }
 
     //1. Normalfall
     @Test
@@ -94,9 +105,17 @@ class ComponentManagerTest {
                 shoppingList1.searchComponent("SSD");
         });
         }
+    // 4. Mindestbestellwert Grenzfall
+    @Test
+    public void testCalculateMinimumOrder() {
+        Component hardDisk = new Component(0.5, true, "SSD");
+        ComponentManager shoppingList1 = new ComponentManager();
+        shoppingList1.buyComponent(hardDisk);
+        assertThrows(IllegalArgumentException.class, shoppingList1::calculatePrice);
 
+    }
 
-    //4.
+    //5. Normalfall, aktive Komponenten werden berechnet
     @Test
     public void testCalculatePriceHappyPathActive() {
         Component hardDisk = new Component(22, true, "SSD");
@@ -105,7 +124,7 @@ class ComponentManagerTest {
         assertEquals(22, shoppingList1.calculatePrice(true));
     }
 
-    //5.
+    //6. Normalfall, passive Komponenten werden berechnet
     @Test
     public void testCalculatePriceHappyPathPassiv() {
         Component hardDisk = new Component(22, true, "SSD");
@@ -114,7 +133,7 @@ class ComponentManagerTest {
         assertEquals(22, shoppingList1.calculatePrice(true));
     }
 
-    //6.
+    //7. Normalfall, Berechnung bei aktiven und passiven Komponenten
     @Test
     public void testCalculatePriceOnceActivePassiv() {
         Component hardDisk = new Component(22, true, "SSD");
@@ -126,13 +145,5 @@ class ComponentManagerTest {
         assertEquals(22, shoppingList1.calculatePrice(true));
 
     }
-    //
-    @Test
-    public void testCalculateMinimumOrder() {
-        Component hardDisk = new Component(0.5, true, "SSD");
-        ComponentManager shoppingList1 = new ComponentManager();
-        shoppingList1.buyComponent(hardDisk);
-        assertThrows(IllegalArgumentException.class, shoppingList1::calculatePrice);
 
-    }
 }
